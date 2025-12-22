@@ -29,27 +29,15 @@ const EmptyPlaylistButton = styled(Button)(({ theme }) => ({
   color: theme.palette.text.primary,
   fontWeight: 500,
   fontSize: "0.95rem",
-  textTransform: "none",
-  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    inset: 0,
-    background: `linear-gradient(135deg, ${theme.palette.primary.main}20, ${theme.palette.secondary.main}20)`,
-    borderRadius: "1rem",
-    opacity: 0,
-    transition: "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-  },
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 
   "&:hover": {
-    background: `${theme.palette.primary.main}50`,
-    borderColor: `${theme.palette.primary.main}80`,
-    color: "#fff",
+    background: `${theme.palette.error.main}50`,
+    borderColor: `${theme.palette.error.main}80`,
     boxShadow: `
-      0 0 30px ${theme.palette.primary.main}80,
-      0 0 60px ${theme.palette.primary.main}40,
-      inset 0 0 30px ${theme.palette.primary.main}30
+      0 0 1.5rem ${theme.palette.error.main}80,
+      0 0 2.5rem ${theme.palette.error.main}40,
+      inset 0 0 1.5rem ${theme.palette.error.main}30
     `,
   },
 
