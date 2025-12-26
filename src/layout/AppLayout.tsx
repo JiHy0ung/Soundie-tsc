@@ -10,7 +10,7 @@ const LayoutContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   height: "100vh",
-  padding: "0rem 0rem 1rem 1rem",
+  padding: "0rem 1rem 1rem 1rem",
 });
 
 const LayoutBox = styled(Box)({
