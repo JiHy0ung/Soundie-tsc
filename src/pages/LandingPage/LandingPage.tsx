@@ -1,5 +1,11 @@
+import NewReleases from "./components/NewReleases";
+
 const LandingPage = () => {
-  return <div>LandingPage</div>;
+  return (
+    <div>
+      <NewReleases />
+    </div>
+  );
 };
 
 export default LandingPage;
