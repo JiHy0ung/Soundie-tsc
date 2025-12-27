@@ -32,6 +32,11 @@ const AlbumBox = styled(Box)(({ theme }) => ({
   boxShadow: `0 0.3rem 0.3rem ${theme.palette.background.paper}`,
   cursor: "pointer",
 
+  [theme.breakpoints.down("sm")]: {
+    width: "160px",
+    height: "160px",
+  },
+
   "&:hover .album-cover": {
     animation: `${rotate} 5s linear infinite`,
   },
@@ -46,6 +51,12 @@ const AlbumBox = styled(Box)(({ theme }) => ({
     backdropFilter: "blur(3px)",
     border: `15px solid rgba(0,0,0,0.1)`,
     boxShadow: `0 0 0 5px rgba(0,0,0,0.1)`,
+    [theme.breakpoints.down("sm")]: {
+      width: "25px",
+      height: "25px",
+      border: `12px solid rgba(0,0,0,0.1)`,
+      boxShadow: `0 0 0 4px rgba(0,0,0,0.1)`,
+    },
   },
   "&::before": {
     position: "absolute",
@@ -55,6 +66,10 @@ const AlbumBox = styled(Box)(({ theme }) => ({
     background: "radial-gradient(circle, rgba(0,0,0) 0%, rgba(0,0,0,0.3) 40%)",
     borderRadius: "50%",
     zIndex: 1,
+    [theme.breakpoints.down("sm")]: {
+      width: "16px",
+      height: "16px",
+    },
   },
 }));
 
@@ -64,12 +79,18 @@ const AlbumCover = styled(Box)<BoxProps<"img">>(({ theme }) => ({
   alignItems: "center",
   maxWidth: "150px",
   maxHeight: "150px",
-  borderRadius: "50% ",
+  borderRadius: "50%",
   overflow: "hidden",
   boxShadow: `
-  0 0 0 0.4rem ${theme.palette.background.paper},
-  inset 0 6px 10px rgba(0,0,0,0.15)
-`,
+    0 0 0 0.4rem ${theme.palette.background.paper},
+    inset 0 6px 10px rgba(0,0,0,0.15)
+  `,
+
+  [theme.breakpoints.down("sm")]: {
+    maxWidth: "120px",
+    maxHeight: "120px",
+  },
+
   "& img": {
     width: "100%",
     height: "100%",
@@ -92,6 +113,11 @@ const AlbumTitleText = styled(Typography)(({ theme }) => ({
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
+
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.9rem",
+    maxWidth: "160px",
+  },
 }));
 
 const AlbumArtistText = styled(Typography)(({ theme }) => ({
@@ -102,6 +128,11 @@ const AlbumArtistText = styled(Typography)(({ theme }) => ({
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
+
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.75rem",
+    maxWidth: "160px",
+  },
 }));
 
 const Card = ({ image, name, artist }: CardProps) => {

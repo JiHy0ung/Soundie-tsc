@@ -16,7 +16,7 @@ const LayoutContainer = styled(Box)({
 const LayoutBox = styled(Box)({
   display: "flex",
   height: "100vh",
-  gap: "0.5rem",
+  gap: "1rem",
 });
 
 const SidebarContainer = styled(Box)(({ theme }) => ({

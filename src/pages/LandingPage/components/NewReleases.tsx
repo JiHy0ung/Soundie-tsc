@@ -36,7 +36,7 @@ const NewReleases = () => {
     <NewReleasesContainer>
       <TitleText>New Releases Albums</TitleText>
       {data && data.albums.items.length > 0 ? (
-        <Grid container spacing={2} sx={{ paddingInline: "1rem" }}>
+        <Grid container spacing={4} sx={{ paddingInline: "1rem" }}>
           {data.albums.items.map((album) => (
             <Grid
               size={{ xs: 6, md: 4, lg: 2 }}
