@@ -21,12 +21,13 @@ const LayoutBox = styled(Box)({
 
 const SidebarContainer = styled(Box)(({ theme }) => ({
   width: "330px",
+  minWidth: "330px",
   height: "100%",
   display: "flex",
   flexDirection: "column",
   borderRadius: "1rem",
   backgroundColor: theme.palette.background.paper,
-  [theme.breakpoints.down("sm")]: {
+  [theme.breakpoints.down("lg")]: {
     display: "none",
   },
 }));

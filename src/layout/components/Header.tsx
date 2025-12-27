@@ -13,7 +13,9 @@ const HeaderContainer = styled(Box)({
 const TitleText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
   fontSize: "2rem",
-  fontFamily: "Cafe24ProUp",
+  fontFamily: "MaruBuri",
+  fontWeight: "700",
+  letterSpacing: -1,
   cursor: "pointer",
 }));
 

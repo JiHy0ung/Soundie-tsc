@@ -4,7 +4,7 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#7c3aed",
+      main: "#f5869eff",
     },
     secondary: {
       main: "#06b6d4",
@@ -13,12 +13,12 @@ const theme = createTheme({
       main: "#ec4899",
     },
     background: {
-      default: "#0a0e1a",
-      paper: "#121328",
+      default: "#f0f0f0ff",
+      paper: "#e6e6e6ff",
     },
     text: {
-      primary: "#e2e8f0",
-      secondary: "#94a3b8",
+      primary: "#111111ff",
+      secondary: "#252525ff",
     },
     action: {
       hover: "#334155",
