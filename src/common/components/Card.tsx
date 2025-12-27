@@ -12,13 +12,13 @@ const rotate = keyframes`
   to { transform: rotate(360deg); }
 `;
 
-const CardContainer = styled(Box)(({ theme }) => ({
+const CardContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   gap: "0.325rem",
-}));
+});
 
 const AlbumBox = styled(Box)(({ theme }) => ({
   display: "flex",
