@@ -5,8 +5,11 @@ import ErrorMessage from "../../../common/components/ErrorMessage";
 import Card from "../../../common/components/Card";
 
 const NewReleasesContainer = styled(Box)({
+  width: "100%",
   display: "flex",
   flexDirection: "column",
+  justifyContent: "center",
+  alignContent: "center",
   gap: "1.625rem",
   overflow: "hidden",
 });

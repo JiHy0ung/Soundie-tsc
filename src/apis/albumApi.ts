@@ -1,5 +1,5 @@
 import axios from "axios";
-import { spotifyBaseUrl } from "../configs/commonConfig";
+import { SPOTIFY_BASE_URL } from "../configs/commonConfig";
 import type { GetNewReleasesResponse } from "../models/album";
 
 export const getNewReleases = async (
@@ -7,7 +7,7 @@ export const getNewReleases = async (
 ): Promise<GetNewReleasesResponse> => {
   try {
     const response = await axios.get(
-      `${spotifyBaseUrl}/browse/new-releases?limit=6`,
+      `${SPOTIFY_BASE_URL}/browse/new-releases?limit=6`,
       {
         headers: {
           Authorization: `Bearer ${clientCredentialToken}`,
