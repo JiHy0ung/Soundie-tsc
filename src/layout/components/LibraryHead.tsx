@@ -33,7 +33,7 @@ const LibraryHeadAddButton = styled(Button)(({ theme }) => ({
   height: "40px",
   margin: 0,
   padding: 0,
-  background: "rgba(30, 41, 59, 0.3)",
+  background: "rgba(178, 178, 178, 0.3)",
   border: "1px solid rgba(148, 163, 184, 0.1)",
   borderRadius: "12px",
   color: theme.palette.text.secondary,

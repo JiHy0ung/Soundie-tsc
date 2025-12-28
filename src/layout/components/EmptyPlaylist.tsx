@@ -23,7 +23,7 @@ const EmptyPlaylistButton = styled(Button)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   padding: "0.875rem 2rem",
-  background: "rgba(30, 41, 59, 0.3)",
+  background: "rgba(178, 178, 178, 0.3)",
   border: "1px solid rgba(148, 163, 184, 0.1)",
   borderRadius: "1rem",
   color: theme.palette.text.primary,
@@ -32,8 +32,8 @@ const EmptyPlaylistButton = styled(Button)(({ theme }) => ({
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 
   "&:hover": {
-    background: `${theme.palette.error.main}50`,
-    borderColor: `${theme.palette.error.main}80`,
+    background: `${theme.palette.error.main}80`,
+    borderColor: `${theme.palette.error.main}50`,
     boxShadow: `
       0 0 1.5rem ${theme.palette.error.main}80,
       0 0 2.5rem ${theme.palette.error.main}40,
