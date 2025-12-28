@@ -1,0 +1,13 @@
+import type { User } from "../models/user";
+import api from "../utils/api";
+
+export const getCurrentUserProfile = async (): Promise<User> => {
+  try {
+    const response = await api.get("/me");
+
+    return response.data;
+  } catch (error) {
+    console.error("Fetch User Profile Error:", error);
+    throw new Error("Fail to fetch User Profile");
+  }
+};

@@ -18,7 +18,7 @@ const theme = createTheme({
     },
     text: {
       primary: "#111111ff",
-      secondary: "#252525ff",
+      secondary: "#434343ff",
     },
     action: {
       hover: "#334155",
