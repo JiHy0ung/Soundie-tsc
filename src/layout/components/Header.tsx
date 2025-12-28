@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Typography,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { Avatar, Box, Typography, Menu, MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import { useNavigate } from "react-router";
