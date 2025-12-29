@@ -26,6 +26,7 @@ function App() {
   useEffect(() => {
     if (code && codeVerifier) {
       exchangeToken({ code, codeVerifier });
+      localStorage.removeItem("code_verifier");
     }
   }, [code, codeVerifier]);
 

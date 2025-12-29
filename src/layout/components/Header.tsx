@@ -102,7 +102,7 @@ const Header = () => {
         <ProfileBox>
           <ProfileAvatar
             alt={userProfile.display_name}
-            src={userProfile.images?.[0].url}
+            src={userProfile.images?.[0]?.url}
             onClick={handleClick}
           />
           <ProfileMenu
