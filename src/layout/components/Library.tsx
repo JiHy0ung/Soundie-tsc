@@ -3,33 +3,78 @@ import useGetCurrentUserPlaylists from "../../hooks/useGetCurrentUserPlaylists";
 import EmptyPlaylist from "./EmptyPlaylist";
 import { styled } from "@mui/material/styles";
 import Playlist from "./Playlist";
+import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const LibraryContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
   width: "100%",
-  paddingInline: "1.25rem",
+  height: "100%",
+  paddingInline: "0.5rem",
+  overflowY: "auto",
+  overflowX: "hidden",
+
+  "&::-webkit-scrollbar": {
+    width: "0.25rem",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "transparent",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    background: "#00000020",
+    borderRadius: "10px",
+    "&:hover": {
+      background: "#00000030",
+    },
+  },
 });
 
 const Library = () => {
-  const { data: playlist } = useGetCurrentUserPlaylists({
+  const {
+    data: playlist,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetCurrentUserPlaylists({
     limit: 10,
     offset: 0,
   });
+  const { data: user } = useGetCurrentUserProfile();
+  const { ref, inView } = useInView();
+  const navigate = useNavigate();
 
-  console.log("pp", playlist);
+  const playlists = playlist?.pages.flatMap((page) => page.items) ?? [];
+
+  const handleClick = (id: string) => {
+    navigate(`/playlist/${id}`);
+  };
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  if (!user) return <EmptyPlaylist />;
+
   return (
     <LibraryContainer>
-      {playlist && playlist.items.length > 0 ? (
-        playlist.items.map((item) => (
-          <Playlist
-            name={item.name || "Untitled Playlist"}
-            owner={item.owner?.display_name || "Unknown"}
-            image={item.images?.[0]?.url || ""}
-          />
-        ))
+      {playlists && playlists.length > 0 ? (
+        <>
+          {playlists.map((playlist, index) => (
+            <Playlist
+              key={index}
+              playlist={playlist}
+              handleClick={handleClick}
+            />
+          ))}
+          <div ref={ref} style={{ color: "transparent" }}>
+            end
+          </div>
+        </>
       ) : (
         <EmptyPlaylist />
       )}

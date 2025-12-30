@@ -15,7 +15,8 @@ const LayoutContainer = styled(Box)({
 
 const LayoutBox = styled(Box)({
   display: "flex",
-  height: "100vh",
+  flex: 1,
+  minHeight: 0,
   gap: "1rem",
 });
 
@@ -36,6 +37,7 @@ const ContentBox = styled(Box)(({ theme }) => ({
   width: "100%",
   padding: "1rem",
   display: "flex",
+  flexShrink: 0,
   marginBottom: "8px",
   marginRight: "8px",
   color: theme.palette.text.primary,
@@ -114,6 +116,10 @@ const NavText = styled(Typography)({ fontWeight: 400, fontSize: "1rem" });
 const LibraryContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
+  flex: 1,
+  minHeight: 0,
+  overflow: "hidden",
+  paddingInline: "0.75rem",
 });
 
 const AppLayout = () => {

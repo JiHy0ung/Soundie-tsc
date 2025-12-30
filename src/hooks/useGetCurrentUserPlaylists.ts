@@ -1,15 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getCurrentUserPlaylists } from "../apis/playlistApi";
 import type { getCurrentUserPlaylistRequest } from "../models/playlist";
 
 const useGetCurrentUserPlaylists = ({
   limit,
-  offset,
 }: getCurrentUserPlaylistRequest) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["current-user-playlists"],
-    queryFn: () => {
-      return getCurrentUserPlaylists({ limit, offset });
+    queryFn: ({ pageParam = 0 }) => {
+      return getCurrentUserPlaylists({ limit, offset: pageParam });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next) {
+        const url = new URL(lastPage.next);
+        const nextOffset = url.searchParams.get("offset");
+        return nextOffset ? parseInt(nextOffset) : undefined;
+      }
+      return undefined;
     },
   });
 };

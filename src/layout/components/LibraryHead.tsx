@@ -6,7 +6,7 @@ const LibraryHeadContainer = styled(Box)({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  padding: "1rem",
+  padding: "1rem 0.5rem",
   marginBottom: "0.5rem",
 });
 

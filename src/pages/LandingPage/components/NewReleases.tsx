@@ -31,7 +31,6 @@ const NewReleases = () => {
     return <ErrorMessage errorMessage={error.message} />;
   }
 
-  console.log("ddd", data);
   return (
     <NewReleasesContainer>
       <TitleText>New Releases Albums</TitleText>

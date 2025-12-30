@@ -1,11 +1,11 @@
 import { Box, Typography, type BoxProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Music } from "lucide-react";
+import type { SimplifiedPlaylist } from "../../models/playlist";
 
 interface PlaylistProps {
-  name: string | null;
-  owner: string;
-  image: string | null;
+  playlist: SimplifiedPlaylist;
+  handleClick: (id: string) => void;
 }
 
 const PlaylistContainer = styled(Box)({
@@ -68,19 +68,23 @@ const PlaylistOwnerText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Playlist = ({ name, owner, image }: PlaylistProps) => {
+const Playlist = ({ playlist, handleClick }: PlaylistProps) => {
   return (
-    <PlaylistContainer>
-      {image ? (
-        <PlaylistImage component="img" src={image} alt={name || "Playlist"} />
+    <PlaylistContainer onClick={() => handleClick(playlist.id || "")}>
+      {playlist.images ? (
+        <PlaylistImage
+          component="img"
+          src={playlist.images[0].url}
+          alt={playlist.name || "Playlist"}
+        />
       ) : (
         <PlaylistImagePlaceholder>
           <Music size={20} />
         </PlaylistImagePlaceholder>
       )}
       <TextBox>
-        <PlaylistNameText>{name}</PlaylistNameText>
-        <PlaylistOwnerText>{owner}</PlaylistOwnerText>
+        <PlaylistNameText>{playlist.name}</PlaylistNameText>
+        <PlaylistOwnerText>{playlist.owner?.display_name}</PlaylistOwnerText>
       </TextBox>
     </PlaylistContainer>
   );
