@@ -3,7 +3,7 @@ import type { Artist } from "./artist";
 import type { ExternalUrls, Image } from "./commonType";
 
 export interface Track {
-  album: SimplifiedAlbum;
+  album?: SimplifiedAlbum;
   artists?: Artist[];
   available_markets?: string[];
   disc_number?: number;

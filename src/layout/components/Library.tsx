@@ -7,6 +7,7 @@ import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { PAGE_LIMIT } from "../../configs/commonConfig";
 
 const LibraryContainer = styled(Box)({
   display: "flex",
@@ -39,7 +40,7 @@ const Library = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useGetCurrentUserPlaylists({
-    limit: 10,
+    limit: PAGE_LIMIT,
     offset: 0,
   });
   const { data: user } = useGetCurrentUserProfile();

@@ -2,18 +2,45 @@ import { Navigate, useParams } from "react-router";
 import useGetPlaylist from "../../hooks/useGetPlaylist";
 import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
 import { styled } from "@mui/material/styles";
-import { Box, Typography, type BoxProps } from "@mui/material";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  type BoxProps,
+} from "@mui/material";
 import { Music } from "lucide-react";
+import useGetPlaylistItems from "../../hooks/useGetPlaylistItems";
+import DesktopPlaylistItem from "./components/DesktopPlaylistItem";
+import { PAGE_LIMIT } from "../../configs/commonConfig";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 const PlaylistContainer = styled(Box)(({ theme }) => ({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "start",
+  alignItems: "start",
+  gap: "2rem",
+  padding: "2rem",
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: "1rem",
+  [theme.breakpoints.down("md")]: {
+    gap: "1rem",
+  },
+}));
+
+const PlaylistHeaderBox = styled(Box)(({ theme }) => ({
   width: "100%",
   display: "flex",
   justifyContent: "start",
   alignItems: "start",
   gap: "2rem",
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: "1rem",
-  padding: "2rem",
   [theme.breakpoints.down("md")]: {
     justifyContent: "start",
     alignItems: "center",
@@ -67,32 +94,105 @@ const PlaylistInfoText = styled(Typography)(({ theme }) => ({
   fontWeight: "400",
 }));
 
+const TrackListTable = styled(Table)({});
+
+const TrackListTableContainer = styled(TableContainer)({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  height: "100%",
+  paddingInline: "0.5rem",
+  overflowY: "auto",
+  overflowX: "hidden",
+
+  "&::-webkit-scrollbar": {
+    width: "0.25rem",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "transparent",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    background: "#00000020",
+    borderRadius: "10px",
+    "&:hover": {
+      background: "#00000030",
+    },
+  },
+});
+
+const TrackListTableBody = styled(TableBody)({});
+
 const PlaylistDetailPage = () => {
+  const { ref, inView } = useInView();
   const { id } = useParams<{ id: string }>();
   const { data: playlist } = useGetPlaylist({ playlist_id: id || "" });
+  const {
+    data: tracks,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetPlaylistItems({
+    playlist_id: id || "",
+    limit: PAGE_LIMIT,
+    offset: 0,
+  });
   const { data: user } = useGetCurrentUserProfile();
+
+  console.log("ttt", tracks);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (id === undefined && !user) return <Navigate to="/" />;
 
-  console.log("pp", playlist);
-
   return (
     <PlaylistContainer>
-      {playlist?.images?.[0].url ? (
-        <PlaylistImage component={"img"} src={playlist?.images?.[0].url} />
-      ) : (
-        <PlaylistImagePlaceholder>
-          <Music size={50} />
-        </PlaylistImagePlaceholder>
-      )}
+      <PlaylistHeaderBox>
+        {playlist?.images?.[0].url ? (
+          <PlaylistImage component={"img"} src={playlist?.images?.[0].url} />
+        ) : (
+          <PlaylistImagePlaceholder>
+            <Music size={50} />
+          </PlaylistImagePlaceholder>
+        )}
 
-      <PlaylistTextBox>
-        <PlaylistName>{playlist?.name}</PlaylistName>
-        <PlaylistOwner>{playlist?.owner?.display_name}</PlaylistOwner>
-        <PlaylistInfoText>
-          총 {playlist?.tracks?.total}곡ㆍ{playlist?.type?.toUpperCase()}
-        </PlaylistInfoText>
-      </PlaylistTextBox>
+        <PlaylistTextBox>
+          <PlaylistName>{playlist?.name}</PlaylistName>
+          <PlaylistOwner>{playlist?.owner?.display_name}</PlaylistOwner>
+          <PlaylistInfoText>
+            {playlist?.type?.toUpperCase()}ㆍ총 {playlist?.tracks?.total}곡
+          </PlaylistInfoText>
+        </PlaylistTextBox>
+      </PlaylistHeaderBox>
+      {playlist?.tracks?.total === 0 ? (
+        "search"
+      ) : (
+        <TrackListTableContainer>
+          <TrackListTable stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Album</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>AddedAt</TableCell>
+              </TableRow>
+            </TableHead>
+            <TrackListTableBody>
+              {tracks?.pages.map((page) =>
+                page.items.map((item, ItemIndex) => {
+                  return <DesktopPlaylistItem key={ItemIndex} item={item} />;
+                })
+              )}
+            </TrackListTableBody>
+            <div ref={ref} style={{ color: "transparent" }}>
+              end
+            </div>
+          </TrackListTable>
+        </TrackListTableContainer>
+      )}
     </PlaylistContainer>
   );
 };

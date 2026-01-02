@@ -56,3 +56,23 @@ export interface PlaylistTrack {
   is_local?: boolean;
   track: Track | Episode;
 }
+
+export interface GetPlaylistItemsRequest extends GetPlaylistRequest {
+  offset?: number;
+  limit?: number;
+}
+
+export type GetPlaylistItemsResponse = ApiResponse<PlaylistTrack>;
+
+export interface PlaylistTrack {
+  added_at: string | null;
+  added_by: {
+    external_urls?: ExternalUrls;
+    href?: string;
+    id?: string;
+    type?: string;
+    uri?: string;
+  } | null;
+  is_local?: boolean;
+  track: Track | Episode;
+}
