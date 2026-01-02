@@ -1,10 +1,47 @@
-import { TableCell, TableRow } from "@mui/material";
+import { Box, colors, TableCell, TableRow, type BoxProps } from "@mui/material";
 import type { PlaylistTrack } from "../../../models/playlist";
 import type { Episode, Track } from "../../../models/track";
+import { alpha, styled } from "@mui/material/styles";
 
 interface DesktopPlaylistItemProps {
   item: PlaylistTrack;
 }
+
+const TrackTableRow = styled(TableRow)(({ theme }) => ({
+  borderRadius: "0.5rem",
+  transition: "all 0.3s ease",
+  cursor: "pointer",
+  "&:nth-of-type(odd)": {
+    backgroundColor: `${alpha(theme.palette.background.default, 0.5)}`,
+  },
+  "&:nth-of-type(even)": {
+    backgroundColor: `${alpha(theme.palette.background.default, 0)}`,
+  },
+  "&:hover": {
+    backgroundColor: `${alpha(theme.palette.background.default, 1)}`,
+    "& td": {
+      color: theme.palette.error.main,
+    },
+  },
+}));
+
+const TrackTitle = styled(TableCell)({
+  display: "flex",
+  alignItems: "center",
+  gap: "1rem",
+  padding: "0.5rem",
+  border: "none",
+});
+
+const TrackCell = styled(TableCell)({
+  padding: "0.5rem",
+  border: "none",
+});
+
+const TrackImage = styled(Box)<BoxProps<"img">>({
+  width: "40px",
+  borderRadius: "0.2rem",
+});
 
 const DesktopPlaylistItem = ({ item }: DesktopPlaylistItemProps) => {
   const isEpisode = (track: Track | Episode): track is Episode => {
@@ -31,14 +68,22 @@ const DesktopPlaylistItem = ({ item }: DesktopPlaylistItemProps) => {
   }
 
   return (
-    <TableRow>
-      <TableCell>{item.track.name || ""}</TableCell>
-      <TableCell>
+    <TrackTableRow>
+      <TrackTitle>
+        <TrackImage
+          component={"img"}
+          src={
+            isEpisode(item.track) ? "No Image" : item.track.album?.images[0].url
+          }
+        />
+        {item.track.name || ""}
+      </TrackTitle>
+      <TrackCell>
         {isEpisode(item.track) ? "N/A" : item.track.album?.name}
-      </TableCell>
-      <TableCell>{formatDuration(item.track.duration_ms)}</TableCell>
-      <TableCell>{formatDate(item.added_at)}</TableCell>
-    </TableRow>
+      </TrackCell>
+      <TrackCell>{formatDuration(item.track.duration_ms)}</TrackCell>
+      <TrackCell>{formatDate(item.added_at)}</TrackCell>
+    </TrackTableRow>
   );
 };
 

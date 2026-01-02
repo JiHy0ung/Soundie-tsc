@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router";
 import useGetPlaylist from "../../hooks/useGetPlaylist";
 import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 import {
   Box,
   Table,
@@ -96,6 +96,17 @@ const PlaylistInfoText = styled(Typography)(({ theme }) => ({
 
 const TrackListTable = styled(Table)({});
 
+const TrackListTableHead = styled(TableHead)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+}));
+
+const TrackListTableCell = styled(TableCell)(({ theme }) => ({
+  padding: "0.5rem 1rem",
+  backgroundColor: theme.palette.background.paper,
+  borderBottom: `1px solid ${alpha(theme.palette.text.secondary, 0.2)}`,
+  letterSpacing: -0.3,
+}));
+
 const TrackListTableContainer = styled(TableContainer)({
   display: "flex",
   flexDirection: "column",
@@ -172,14 +183,18 @@ const PlaylistDetailPage = () => {
       ) : (
         <TrackListTableContainer>
           <TrackListTable stickyHeader>
-            <TableHead>
+            <TrackListTableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Album</TableCell>
-                <TableCell>Duration</TableCell>
-                <TableCell>AddedAt</TableCell>
+                <TrackListTableCell sx={{ borderRadius: "0.5rem 0 0 0" }}>
+                  노래
+                </TrackListTableCell>
+                <TrackListTableCell>앨범</TrackListTableCell>
+                <TrackListTableCell>재생시간</TrackListTableCell>
+                <TrackListTableCell sx={{ borderRadius: " 0 0.5rem 0 0 " }}>
+                  추가한 날짜
+                </TrackListTableCell>
               </TableRow>
-            </TableHead>
+            </TrackListTableHead>
             <TrackListTableBody>
               {tracks?.pages.map((page) =>
                 page.items.map((item, ItemIndex) => {
