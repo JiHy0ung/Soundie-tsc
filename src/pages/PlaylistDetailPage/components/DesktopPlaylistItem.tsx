@@ -1,4 +1,4 @@
-import { Box, colors, TableCell, TableRow, type BoxProps } from "@mui/material";
+import { Box, TableCell, TableRow, type BoxProps } from "@mui/material";
 import type { PlaylistTrack } from "../../../models/playlist";
 import type { Episode, Track } from "../../../models/track";
 import { alpha, styled } from "@mui/material/styles";

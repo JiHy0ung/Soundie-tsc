@@ -116,18 +116,10 @@ const TrackListTableContainer = styled(TableContainer)({
   overflowY: "auto",
   overflowX: "hidden",
 
+  scrollbarWidth: "none",
+  msOverflowStyle: "none",
   "&::-webkit-scrollbar": {
-    width: "0.25rem",
-  },
-  "&::-webkit-scrollbar-track": {
-    background: "transparent",
-  },
-  "&::-webkit-scrollbar-thumb": {
-    background: "#00000020",
-    borderRadius: "10px",
-    "&:hover": {
-      background: "#00000030",
-    },
+    display: "none",
   },
 });
 
