@@ -2,6 +2,8 @@ import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Bookmark, Plus } from "lucide-react";
 import useCreatePlaylist from "../../hooks/useCreatePlaylist";
+import useGetCurrentUserProfile from "../../hooks/useGetCurrentUserProfile";
+import { getSpotifyAuthUrl } from "../../utils/auth";
 
 const LibraryHeadContainer = styled(Box)({
   display: "flex",
@@ -58,8 +60,12 @@ const LibraryHeadAddButton = styled(Button)(({ theme }) => ({
 
 const LibraryHead = () => {
   const { mutate: createPlaylist } = useCreatePlaylist();
+  const { data: user } = useGetCurrentUserProfile();
 
   const handleCreatePlaylist = () => {
+    if (!user) {
+      getSpotifyAuthUrl();
+    }
     createPlaylist({ name: "나의 플레이리스트" });
   };
 

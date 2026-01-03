@@ -20,6 +20,7 @@ import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import LoginButton from "../../common/components/LoginButton";
+import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
 
 const PlaylistContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -237,7 +238,7 @@ const PlaylistDetailPage = () => {
         </PlaylistTextBox>
       </PlaylistHeaderBox>
       {playlist?.tracks?.total === 0 ? (
-        "SEARCH"
+        <EmptyPlaylistWithSearch />
       ) : (
         <TrackListTableContainer>
           <TrackListTable stickyHeader>
