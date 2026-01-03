@@ -19,6 +19,7 @@ import DesktopPlaylistItem from "./components/DesktopPlaylistItem";
 import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import LoginButton from "../../common/components/LoginButton";
 
 const PlaylistContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -115,7 +116,6 @@ const TrackListTableContainer = styled(TableContainer)({
   paddingInline: "0.5rem",
   overflowY: "auto",
   overflowX: "hidden",
-
   scrollbarWidth: "none",
   msOverflowStyle: "none",
   "&::-webkit-scrollbar": {
@@ -124,6 +124,50 @@ const TrackListTableContainer = styled(TableContainer)({
 });
 
 const TrackListTableBody = styled(TableBody)({});
+
+const PlaylistDetailLogin = styled(Box)({
+  width: "100%",
+  height: "50%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  fontWeight: 600,
+  fontSize: "1rem",
+});
+
+const LoginCard = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "1.2rem",
+  padding: "2.5rem 2rem",
+  borderRadius: "1rem",
+});
+
+const LoginIconBox = styled(Box)(({ theme }) => ({
+  width: "3.5rem",
+  height: "3.5rem",
+  borderRadius: "50%",
+  backgroundColor: alpha(theme.palette.error.main, 0.1),
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  color: theme.palette.error.main,
+}));
+
+const LoginTitle = styled(Typography)(({ theme }) => ({
+  fontSize: "1.25rem",
+  fontWeight: 600,
+  color: theme.palette.text.primary,
+}));
+
+const LoginDescription = styled(Typography)(({ theme }) => ({
+  fontSize: "0.875rem",
+  color: theme.palette.text.secondary,
+  textAlign: "center",
+  lineHeight: 1.6,
+}));
 
 const PlaylistDetailPage = () => {
   const { ref, inView } = useInView();
@@ -149,6 +193,28 @@ const PlaylistDetailPage = () => {
     }
   }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  if (!user) {
+    return (
+      <PlaylistDetailLogin>
+        <LoginCard>
+          <LoginIconBox>
+            <Music size={22} />
+          </LoginIconBox>
+
+          <LoginTitle>로그인 후 이용할 수 있어요</LoginTitle>
+
+          <LoginDescription>
+            이 플레이리스트의 곡 목록을 보려면
+            <br />
+            Spotify 계정으로 로그인해주세요.
+          </LoginDescription>
+
+          <LoginButton />
+        </LoginCard>
+      </PlaylistDetailLogin>
+    );
+  }
+
   if (id === undefined && !user) return <Navigate to="/" />;
 
   return (
@@ -171,7 +237,7 @@ const PlaylistDetailPage = () => {
         </PlaylistTextBox>
       </PlaylistHeaderBox>
       {playlist?.tracks?.total === 0 ? (
-        "search"
+        "SEARCH"
       ) : (
         <TrackListTableContainer>
           <TrackListTable stickyHeader>

@@ -13,7 +13,7 @@ export interface User {
   external_urls?: ExternalUrls;
   followers?: Followers;
   href?: string;
-  id?: string;
+  id: string;
   images?: Image[];
   product?: string;
   type?: string;

@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Bookmark, Plus } from "lucide-react";
+import useCreatePlaylist from "../../hooks/useCreatePlaylist";
 
 const LibraryHeadContainer = styled(Box)({
   display: "flex",
@@ -56,13 +57,19 @@ const LibraryHeadAddButton = styled(Button)(({ theme }) => ({
 }));
 
 const LibraryHead = () => {
+  const { mutate: createPlaylist } = useCreatePlaylist();
+
+  const handleCreatePlaylist = () => {
+    createPlaylist({ name: "나의 플레이리스트" });
+  };
+
   return (
     <LibraryHeadContainer>
       <TitleBox>
         <Bookmark strokeWidth={1.5} size={20} />
         <HeaderTitle>나의 라이브러리</HeaderTitle>
       </TitleBox>
-      <LibraryHeadAddButton disableRipple>
+      <LibraryHeadAddButton disableRipple onClick={handleCreatePlaylist}>
         <Plus strokeWidth={1.5} size={20} />
       </LibraryHeadAddButton>
     </LibraryHeadContainer>

@@ -1,4 +1,5 @@
 import type {
+  CreatePlaylistRequest,
   getCurrentUserPlaylistRequest,
   GetCurrentUserPlaylistResponse,
   GetPlaylistItemsRequest,
@@ -49,5 +50,25 @@ export const getPlaylistItems = async (
   } catch (error) {
     console.log("Fetch Playlists Items Error", error);
     throw new Error("Fail to fetch Playlists Items.");
+  }
+};
+
+export const createPlaylist = async (
+  user_id: string,
+  params: CreatePlaylistRequest
+): Promise<Playlist> => {
+  try {
+    const { name, playlistPublic, collaborative, description } = params;
+    const response = await api.post(`/users/${user_id}/playlists`, {
+      name,
+      public: playlistPublic,
+      collaborative,
+      description,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log("Fetch Create Playlist Error", error);
+    throw new Error("Failed to create new playlist.");
   }
 };
