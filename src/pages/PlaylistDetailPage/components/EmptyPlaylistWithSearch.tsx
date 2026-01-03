@@ -30,6 +30,7 @@ const SearchDescription = styled(Typography)(({ theme }) => ({
 
 const SearchInput = styled(TextField)(({ theme }) => ({
   width: "60%",
+  maxWidth: "30rem",
   minWidth: "16rem",
   marginTop: "0.5rem",
   marginInline: "20rem",
