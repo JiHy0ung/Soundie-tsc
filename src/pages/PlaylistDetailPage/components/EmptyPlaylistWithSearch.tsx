@@ -1,17 +1,31 @@
-import { Box, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSearchItemsByKeyword from "../../../hooks/useSearchItemsByKeyword";
 import { SEARCH_TYPE } from "../../../models/search";
 import SearchResultList from "./SearchResultList";
 import { AudioLines, Search } from "lucide-react";
+import { useInView } from "react-intersection-observer";
+import { PAGE_LIMIT } from "../../../configs/commonConfig";
 
 const SearchContainer = styled(Box)({
+  flex: 1,
   width: "100%",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   alignItems: "center",
+  minHeight: 0,
+  overflow: "hidden",
+  paddingTop: "2rem",
+  scrollbarWidth: "none",
+  msOverflowStyle: "none",
 });
 
 const SearchTitle = styled(Typography)(({ theme }) => ({
@@ -33,7 +47,6 @@ const SearchInput = styled(TextField)(({ theme }) => ({
   maxWidth: "30rem",
   minWidth: "16rem",
   marginTop: "0.5rem",
-  marginInline: "20rem",
   backgroundColor: theme.palette.background.default,
   borderRadius: "1rem",
 
@@ -73,18 +86,95 @@ const IconBox = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   color: theme.palette.secondary.main,
+  flexShrink: 0,
 }));
+
+const ResultBox = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "start",
+  alignItems: "center",
+  maxWidth: "30rem",
+  minWidth: "16rem",
+  width: "100%",
+  flex: 1,
+  minHeight: 0,
+  overflowY: "auto",
+  marginTop: "1rem",
+  paddingBottom: "1rem",
+  scrollbarWidth: "none",
+  msOverflowStyle: "none",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+});
+
+const EmptyStateBox = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "1rem",
+  gap: "0.75rem",
+  width: "100%",
+});
+
+const EmptyStateText = styled(Typography)(({ theme }) => ({
+  fontSize: "0.875rem",
+  color: theme.palette.text.secondary,
+  textAlign: "center",
+  lineHeight: 1.5,
+}));
+
+const EmptyStateKeyword = styled(Typography)(({ theme }) => ({
+  fontSize: "1rem",
+  color: theme.palette.text.primary,
+  fontWeight: 600,
+  textAlign: "center",
+}));
+
+const LoadingBox = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "3rem",
+  width: "100%",
+});
 
 const EmptyPlaylistWithSearch = () => {
   const [keyword, setKeyword] = useState<string>("");
-  const { data: result } = useSearchItemsByKeyword({
+  const {
+    data: result,
+    isLoading,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useSearchItemsByKeyword({
     q: keyword,
     type: [SEARCH_TYPE.TRACK],
+    limit: PAGE_LIMIT,
+    offset: 0,
   });
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleSearchKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
   };
+
+  const totalTracks =
+    result?.pages.reduce((total, page) => {
+      return total + (page.tracks?.items?.length || 0);
+    }, 0) || 0;
+
+  const hasResults = totalTracks > 0;
+  const hasKeyword = keyword.trim().length > 0;
 
   return (
     <SearchContainer>
@@ -107,10 +197,40 @@ const EmptyPlaylistWithSearch = () => {
           ),
         }}
       />
-      {result?.pages.map((item) => {
-        if (!item.tracks) return false;
-        return <SearchResultList list={item.tracks?.items} />;
-      })}
+      {!hasKeyword ? null : isLoading ? (
+        <ResultBox>
+          <LoadingBox>
+            <CircularProgress size={32} />
+          </LoadingBox>
+        </ResultBox>
+      ) : hasResults ? (
+        <ResultBox>
+          {result?.pages.map((item, index) => {
+            if (!item.tracks?.items || item.tracks.items.length === 0)
+              return null;
+            return <SearchResultList key={index} list={item.tracks.items} />;
+          })}
+          <div ref={ref} style={{ height: "20px", width: "100%" }}>
+            {isFetchingNextPage && (
+              <LoadingBox sx={{ padding: "1rem" }}>
+                <CircularProgress size={24} />
+              </LoadingBox>
+            )}
+          </div>
+        </ResultBox>
+      ) : (
+        <ResultBox>
+          <EmptyStateBox>
+            <Search size={28} style={{ opacity: 0.4 }} />
+            <EmptyStateKeyword>"{keyword}"</EmptyStateKeyword>
+            <EmptyStateText>
+              검색어와 매칭되는 결과가 없습니다.
+              <br />
+              다른 검색어로 시도해보세요.
+            </EmptyStateText>
+          </EmptyStateBox>
+        </ResultBox>
+      )}
     </SearchContainer>
   );
 };
