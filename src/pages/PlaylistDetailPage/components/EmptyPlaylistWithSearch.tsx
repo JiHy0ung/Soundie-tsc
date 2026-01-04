@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import useSearchItemsByKeyword from "../../../hooks/useSearchItemsByKeyword";
 import { SEARCH_TYPE } from "../../../models/search";
 import SearchResultList from "./SearchResultList";
-import { AudioLines, Search } from "lucide-react";
+import { AudioLines, Frown, Search } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { PAGE_LIMIT } from "../../../configs/commonConfig";
 
@@ -221,7 +221,7 @@ const EmptyPlaylistWithSearch = () => {
       ) : (
         <ResultBox>
           <EmptyStateBox>
-            <Search size={28} style={{ opacity: 0.4 }} />
+            <Frown size={28} style={{ opacity: 0.4 }} />
             <EmptyStateKeyword>"{keyword}"</EmptyStateKeyword>
             <EmptyStateText>
               검색어와 매칭되는 결과가 없습니다.
