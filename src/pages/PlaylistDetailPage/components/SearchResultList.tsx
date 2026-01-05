@@ -1,6 +1,10 @@
-import { Box, Typography, type BoxProps } from "@mui/material";
+import { Box, Button, Typography, type BoxProps } from "@mui/material";
 import type { Track } from "../../../models/track";
 import { alpha, styled } from "@mui/material/styles";
+import { Plus } from "lucide-react";
+import useGetCurrentUserProfile from "../../../hooks/useGetCurrentUserProfile";
+import { useParams } from "react-router";
+import useAddItemToPlaylist from "../../../hooks/useAddItemToPlaylist";
 
 interface SearchResultListProps {
   list: Track[];
@@ -14,7 +18,7 @@ const ListContainer = styled(Box)({
 });
 
 const ResultContainer = styled(Box)(({ theme }) => ({
-  minWidth: "27rem",
+  minWidth: "25rem",
   width: "100%",
   display: "flex",
   justifyContent: "start",
@@ -62,7 +66,49 @@ const Artist = styled(Typography)(({ theme }) => ({
   whiteSpace: "nowrap",
 }));
 
+const AddButton = styled(Button)(({ theme }) => ({
+  position: "relative",
+  minWidth: "30px",
+  width: "30px",
+  height: "30px",
+  marginRight: "0.3rem",
+  padding: 0,
+  background: "rgba(178, 178, 178, 0.3)",
+  border: "1px solid rgba(148, 163, 184, 0.1)",
+  borderRadius: "0.5rem",
+  color: theme.palette.text.secondary,
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+
+  "&:hover": {
+    background: `${alpha(theme.palette.primary.main, 0.7)}`,
+    border: `0.5px solid ${theme.palette.primary.main}`,
+    color: theme.palette.background.default,
+    transform: "scale(1.05)",
+    boxShadow: `
+      0 4px 12px ${theme.palette.primary.main}20,
+      inset 0 1px 10px ${theme.palette.primary.main}10
+    `,
+  },
+
+  "&:active": {
+    transform: "scale(0.95)",
+  },
+}));
+
 const SearchResultList = ({ list }: SearchResultListProps) => {
+  const { data: user } = useGetCurrentUserProfile();
+  const { mutate: addItem } = useAddItemToPlaylist();
+  const { id } = useParams<{ id: string }>();
+
+  const handleAddTrackToPlaylist = (uri: string) => {
+    if (user && id) {
+      addItem({ playlist_id: id, uris: [uri] });
+      console.log(uri);
+    }
+  };
+
+  console.log("ll", list);
+
   return (
     <ListContainer>
       {list.map((track, index) => (
@@ -72,6 +118,16 @@ const SearchResultList = ({ list }: SearchResultListProps) => {
             <Title>{track.name}</Title>
             <Artist>{track.artists?.[0].name}</Artist>
           </TextBox>
+          <AddButton
+            disableRipple
+            onClick={() => {
+              if (track.uri) {
+                handleAddTrackToPlaylist(track.uri);
+              }
+            }}
+          >
+            <Plus strokeWidth={1.5} size={16} />
+          </AddButton>
         </ResultContainer>
       ))}
     </ListContainer>
