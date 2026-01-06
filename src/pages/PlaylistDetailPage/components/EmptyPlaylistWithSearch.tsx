@@ -23,7 +23,6 @@ const SearchContainer = styled(Box)({
   alignItems: "center",
   minHeight: 0,
   overflow: "hidden",
-  paddingTop: "2rem",
   scrollbarWidth: "none",
   msOverflowStyle: "none",
 });
@@ -78,8 +77,7 @@ const SearchInput = styled(TextField)(({ theme }) => ({
 const IconBox = styled(Box)(({ theme }) => ({
   width: "3.5rem",
   height: "3.5rem",
-  marginTop: "1.625rem",
-  marginBottom: "1.625rem",
+  marginBottom: "1rem",
   borderRadius: "50%",
   backgroundColor: alpha(theme.palette.secondary.main, 0.15),
   display: "flex",
@@ -94,8 +92,6 @@ const ResultBox = styled(Box)({
   flexDirection: "column",
   justifyContent: "start",
   alignItems: "center",
-  maxWidth: "40rem",
-  minWidth: "16rem",
   width: "100%",
   flex: 1,
   minHeight: 0,

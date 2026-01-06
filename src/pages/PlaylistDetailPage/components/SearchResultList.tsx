@@ -18,7 +18,6 @@ const ListContainer = styled(Box)({
 });
 
 const ResultContainer = styled(Box)(({ theme }) => ({
-  minWidth: "25rem",
   width: "100%",
   display: "flex",
   justifyContent: "start",
