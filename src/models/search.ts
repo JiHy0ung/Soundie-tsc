@@ -1,6 +1,7 @@
 import type { SimplifiedAlbum } from "./album";
 import type { ApiResponse } from "./apiResponse";
 import type { Artist } from "./artist";
+import type { Image } from "./commonType";
 import type { SimplifiedPlaylist } from "./playlist";
 import type {
   Show,
@@ -36,4 +37,21 @@ export interface SearchResponse {
   shows?: ApiResponse<Show>;
   episodes?: ApiResponse<SimplifiedEpisode>;
   audiobooks?: ApiResponse<SimplifiedAudiobook>;
+}
+
+export interface GetSeveralBrowseCategoriesRequest {
+  locale?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export interface GetSeveralBrowseCategoriesResponse {
+  categories: ApiResponse<Category>;
+}
+
+export interface Category {
+  href: string;
+  icons: Image[];
+  id: string;
+  name: string;
 }
