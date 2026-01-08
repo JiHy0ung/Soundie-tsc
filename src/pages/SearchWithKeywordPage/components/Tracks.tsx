@@ -1,6 +1,7 @@
 import type { Track } from "../../../models/track";
 import { Box, Grid, Typography } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
+import { Play } from "lucide-react";
 
 interface TracksProps {
   tracks: Track[];
@@ -65,7 +66,7 @@ const SearchTrackTrackResultArea = styled(Box)({
   borderRadius: "4px",
   "&:hover": {
     backgroundColor: "#ffffff1a",
-    "& svg": {
+    "& .play-button": {
       opacity: "1",
     },
   },
@@ -78,10 +79,28 @@ const SearchTrackTrackResultTrackArea = styled(Box)({
   gap: "8px",
 });
 
-const SearchTrackTrackCover = styled("img")({
+const TrackCoverContainer = styled(Box)({
+  position: "relative",
+  width: "40px",
+  height: "40px",
+});
+
+const PlayButton = styled(Box)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  opacity: 0,
+  transition: "opacity 0.2s ease",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  color: "#fff",
+  pointerEvents: "none",
+});
+
+const SearchTrackTrackCover = styled("img")({
+  display: "block",
   width: "40px",
   height: "40px",
   borderRadius: "4px",
@@ -134,12 +153,18 @@ const Tracks = ({ tracks }: TracksProps) => {
           <SearchTrackTrackResultContainer>
             {tracks.slice(0, 4).map((track) => {
               return (
-                <SearchTrackTrackResultArea>
+                <SearchTrackTrackResultArea key={track.id}>
                   <SearchTrackTrackResultTrackArea>
-                    <SearchTrackTrackCover
-                      src={track.album?.images[0].url}
-                      alt={track.name}
-                    />
+                    <TrackCoverContainer>
+                      <SearchTrackTrackCover
+                        src={track.album?.images[0].url}
+                        alt={track.name}
+                      />
+                      <PlayButton className="play-button">
+                        <Play fill="#fff" size={20} />
+                      </PlayButton>
+                    </TrackCoverContainer>
+
                     <SearchTrackTrackTextInfo>
                       <SearchTrackTrackTitle variant="h2" fontWeight={400}>
                         {track.name}
