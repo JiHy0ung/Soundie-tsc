@@ -30,7 +30,7 @@ export interface SearchRequestParams {
 }
 
 export interface SearchResponse {
-  artist?: ApiResponse<Artist>;
+  artists?: ApiResponse<Artist>;
   albums?: ApiResponse<SimplifiedAlbum>;
   tracks?: ApiResponse<Track>;
   playlists?: ApiResponse<SimplifiedPlaylist>;

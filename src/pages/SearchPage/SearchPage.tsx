@@ -1,9 +1,9 @@
-import { Box, InputAdornment, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import useGetSeveralBrowseCategories from "../../hooks/useGetSeveralBrowseCategories";
 import { styled } from "@mui/material/styles";
-import { alpha, Grid, type BoxProps } from "@mui/system";
-import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Grid, type BoxProps } from "@mui/system";
+import { useMemo } from "react";
+import { SearchInput } from "../../common/components/SearchInput";
 
 const SearchPageContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -19,40 +19,6 @@ const SearchPageContainer = styled(Box)(({ theme }) => ({
   msOverflowStyle: "none",
   "&::-webkit-scrollbar": {
     display: "none",
-  },
-}));
-
-const SearchInput = styled(TextField)(({ theme }) => ({
-  width: "70%",
-  maxWidth: "30rem",
-  minWidth: "18rem",
-  marginBlock: "1rem",
-  backgroundColor: theme.palette.background.default,
-  borderRadius: "1rem",
-
-  "& .MuiInputBase-root": {
-    border: `0.5px solid ${alpha(theme.palette.text.secondary, 0.5)}`,
-    borderRadius: "1rem",
-    height: "2.625rem",
-    fontSize: "0.9rem",
-  },
-
-  "& .MuiInputBase-input": {
-    padding: "0 0.5rem",
-    height: "100%",
-    boxSizing: "border-box",
-  },
-
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderWidth: "1px",
-    },
-    "&:hover fieldset": {
-      borderWidth: "1px",
-    },
-    "&.Mui-focused fieldset": {
-      borderWidth: "1px",
-    },
   },
 }));
 
@@ -117,7 +83,6 @@ const CategoryText = styled(Typography)(() => ({
 }));
 
 const SearchPage = () => {
-  const [keyword, setKeyword] = useState<string>("");
   const { data: category } = useGetSeveralBrowseCategories();
 
   const generateRandomColor = () => {
@@ -134,26 +99,9 @@ const SearchPage = () => {
     }, {} as Record<string, string>);
   }, [category]);
 
-  const handleSearchKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value);
-  };
-
-  console.log("ccc", category);
-
   return (
     <SearchPageContainer>
-      <SearchInput
-        value={keyword}
-        onChange={handleSearchKeyword}
-        placeholder="곡이나 아티스트를 검색해보세요."
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search size={18} />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <SearchInput />
       <CategoryTitle>모두 둘러보기</CategoryTitle>
       <Grid container spacing={3} sx={{ width: "100%" }}>
         {category?.categories?.items.map((item) => (

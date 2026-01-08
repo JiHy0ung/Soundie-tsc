@@ -15,11 +15,12 @@ const useSearchItemsByKeyword = (params: SearchRequestParams) => {
         offset: pageParam,
       });
     },
+    enabled: !!clientCredentialToken && params.q.trim() !== "",
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       const nextPageUrl =
         lastPage.albums?.next ||
-        lastPage.artist?.next ||
+        lastPage.artists?.next ||
         lastPage.playlists?.next ||
         lastPage.tracks?.next ||
         lastPage.shows?.next ||
