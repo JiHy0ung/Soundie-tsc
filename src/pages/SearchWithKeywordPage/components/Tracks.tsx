@@ -1,7 +1,21 @@
 import type { Track } from "../../../models/track";
-import { Box, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Menu,
+  MenuItem,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
-import { Play } from "lucide-react";
+import { Play, Plus } from "lucide-react";
+import useGetCurrentUserPlaylists from "../../../hooks/useGetCurrentUserPlaylists";
+import useGetCurrentUserProfile from "../../../hooks/useGetCurrentUserProfile";
+import { getSpotifyAuthUrl } from "../../../utils/auth";
+import useAddItemToPlaylist from "../../../hooks/useAddItemToPlaylist";
+import { useEffect, useState, type MouseEvent } from "react";
+import { useInView } from "react-intersection-observer";
 
 interface TracksProps {
   tracks: Track[];
@@ -121,7 +135,121 @@ const SearchTrackTrackArtist = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const AddButton = styled(Button)(({ theme }) => ({
+  position: "relative",
+  minWidth: "30px",
+  width: "30px",
+  height: "30px",
+  marginRight: "0.3rem",
+  padding: 0,
+  background: "rgba(178, 178, 178, 0.3)",
+  border: "1px solid rgba(148, 163, 184, 0.1)",
+  borderRadius: "0.5rem",
+  color: theme.palette.text.secondary,
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+
+  "&:hover": {
+    background: `${alpha(theme.palette.primary.main, 0.7)}`,
+    border: `0.5px solid ${theme.palette.primary.main}`,
+    color: theme.palette.background.default,
+    transform: "scale(1.05)",
+    boxShadow: `
+      0 4px 12px ${theme.palette.primary.main}20,
+      inset 0 1px 10px ${theme.palette.primary.main}10
+    `,
+  },
+
+  "&:active": {
+    transform: "scale(0.95)",
+  },
+}));
+
+const StyledMenu = styled(Menu)(({ theme }) => ({
+  "& .MuiPaper-root": {
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: "8px",
+    marginTop: "8px",
+    minWidth: "220px",
+    maxHeight: "400px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+  },
+}));
+
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+  padding: "12px 16px",
+  fontSize: "14px",
+  color: theme.palette.text.primary,
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+  },
+}));
+
 const Tracks = ({ tracks }: TracksProps) => {
+  const { data: user } = useGetCurrentUserProfile();
+  const { mutate: addItem } = useAddItemToPlaylist();
+
+  const {
+    data: playlistData,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetCurrentUserPlaylists({
+    limit: 50,
+    offset: 0,
+  });
+
+  const playlists = playlistData?.pages.flatMap((page) => page.items) || [];
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedTrackUri, setSelectedTrackUri] = useState<string>("");
+  const open = Boolean(anchorEl);
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  const handleClick = (
+    event: MouseEvent<HTMLButtonElement>,
+    trackUri: string
+  ) => {
+    event.stopPropagation();
+
+    if (!user) {
+      getSpotifyAuthUrl();
+      return;
+    }
+
+    setAnchorEl(event.currentTarget);
+    setSelectedTrackUri(trackUri);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedTrackUri("");
+  };
+
+  const handleAddTrackToPlaylist = (playlistId: string) => {
+    if (user && selectedTrackUri && playlistId) {
+      addItem({ playlist_id: playlistId, uris: [selectedTrackUri] });
+    }
+    handleClose();
+  };
+
+  const handleScroll = (event: React.UIEvent<HTMLUListElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+
+    if (
+      scrollHeight - scrollTop <= clientHeight * 1.5 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <SearchTrackContainer>
       <Grid width={"100%"} container spacing={2}>
@@ -164,7 +292,6 @@ const Tracks = ({ tracks }: TracksProps) => {
                         <Play fill="#fff" size={20} />
                       </PlayButton>
                     </TrackCoverContainer>
-
                     <SearchTrackTrackTextInfo>
                       <SearchTrackTrackTitle variant="h2" fontWeight={400}>
                         {track.name}
@@ -174,12 +301,68 @@ const Tracks = ({ tracks }: TracksProps) => {
                       </SearchTrackTrackArtist>
                     </SearchTrackTrackTextInfo>
                   </SearchTrackTrackResultTrackArea>
+                  <AddButton
+                    disableRipple
+                    onClick={(e) => {
+                      if (track.uri) {
+                        handleClick(e, track.uri);
+                      }
+                    }}
+                  >
+                    <Plus strokeWidth={1.5} size={16} />
+                  </AddButton>
                 </SearchTrackTrackResultArea>
               );
             })}
           </SearchTrackTrackResultContainer>
         </Grid>
       </Grid>
+
+      <StyledMenu
+        id="playlist-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        MenuListProps={{
+          "aria-labelledby": "add-button",
+          onScroll: handleScroll,
+        }}
+      >
+        {playlists.length === 0 ? (
+          <StyledMenuItem disabled>플레이리스트가 없습니다</StyledMenuItem>
+        ) : (
+          playlists.map((playlist) => (
+            <>
+              <StyledMenuItem
+                key={playlist.id}
+                onClick={() => {
+                  if (playlist.id) {
+                    handleAddTrackToPlaylist(playlist.id);
+                  }
+                }}
+              >
+                {playlist.name}
+              </StyledMenuItem>
+              <div ref={ref} style={{ color: "transparent" }}>
+                end
+              </div>
+            </>
+          ))
+        )}
+        {isFetchingNextPage && (
+          <Box display="flex" justifyContent="center" padding={2}>
+            <CircularProgress size={20} />
+          </Box>
+        )}
+      </StyledMenu>
     </SearchTrackContainer>
   );
 };
