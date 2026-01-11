@@ -19,6 +19,11 @@ const LandingContainer = styled(Box)(({ theme }) => ({
   "&::-webkit-scrollbar": {
     display: "none",
   },
+
+  [theme.breakpoints.down("lg")]: {
+    backgroundColor: "transparent",
+    padding: "0rem",
+  },
 }));
 
 const ContentWrapper = styled(Box)({

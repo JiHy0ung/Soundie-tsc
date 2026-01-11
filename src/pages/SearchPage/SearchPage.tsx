@@ -20,6 +20,10 @@ const SearchPageContainer = styled(Box)(({ theme }) => ({
   "&::-webkit-scrollbar": {
     display: "none",
   },
+  [theme.breakpoints.down("lg")]: {
+    backgroundColor: "transparent",
+    padding: "1rem",
+  },
 }));
 
 const CategoryTitle = styled(Typography)(({ theme }) => ({

@@ -15,6 +15,7 @@ const PlaylistPage = React.lazy(
 const PlaylistDetailPage = React.lazy(
   () => import("./pages/PlaylistDetailPage/PlaylistDetailPage")
 );
+const LibraryPage = React.lazy(() => import("./pages/LibraryPage/LibraryPage"));
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -39,6 +40,7 @@ function App() {
           <Route path="search/:keyword" element={<SearchWithKeywordPage />} />
           <Route path="playlist" element={<PlaylistPage />} />
           <Route path="playlist/:id" element={<PlaylistDetailPage />} />
+          <Route path="library" element={<LibraryPage />} />
         </Route>
       </Routes>
     </Suspense>

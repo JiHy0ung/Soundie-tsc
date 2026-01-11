@@ -1,17 +1,25 @@
 import { styled } from "@mui/material/styles";
-import { Box, Typography } from "@mui/material";
-import { NavLink, Outlet } from "react-router";
-import { House, Search } from "lucide-react";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Box,
+  Typography,
+} from "@mui/material";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
+import { BookMarked, Home, House, Search } from "lucide-react";
 import LibraryHead from "./components/LibraryHead";
 import Library from "./components/Library";
 import Header from "./components/Header";
 
-const LayoutContainer = styled(Box)({
+const LayoutContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   height: "100vh",
   padding: "0rem 1rem 1rem 1rem",
-});
+  [theme.breakpoints.down("lg")]: {
+    padding: "0rem",
+  },
+}));
 
 const LayoutBox = styled(Box)({
   display: "flex",
@@ -123,6 +131,15 @@ const LibraryContainer = styled(Box)({
 });
 
 const AppLayout = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const getBottomNavValue = () => {
+    if (location.pathname === "/") return 0;
+    if (location.pathname === "/search") return 1;
+    if (location.pathname === "/library") return 2;
+    return 0;
+  };
   return (
     <LayoutContainer>
       <Header />
@@ -147,6 +164,43 @@ const AppLayout = () => {
         </SidebarContainer>
         <Outlet />
       </LayoutBox>
+      <BottomNavigation
+        showLabels
+        value={getBottomNavValue()}
+        onChange={(_, newValue) => {
+          if (newValue === 0) navigate("/");
+          if (newValue === 1) navigate("/search");
+          if (newValue === 2) navigate("/library");
+        }}
+        sx={{
+          display: { xs: "flex", lg: "none" },
+        }}
+      >
+        <BottomNavigationAction
+          label="홈"
+          icon={<Home strokeWidth={1.5} size={20} />}
+          sx={{
+            display: "flex",
+            gap: "0.15rem",
+          }}
+        />
+        <BottomNavigationAction
+          label="검색"
+          icon={<Search strokeWidth={1.5} size={20} />}
+          sx={{
+            display: "flex",
+            gap: "0.15rem",
+          }}
+        />
+        <BottomNavigationAction
+          label="보관함"
+          icon={<BookMarked strokeWidth={1.5} size={20} />}
+          sx={{
+            display: "flex",
+            gap: "0.15rem",
+          }}
+        />
+      </BottomNavigation>
     </LayoutContainer>
   );
 };
