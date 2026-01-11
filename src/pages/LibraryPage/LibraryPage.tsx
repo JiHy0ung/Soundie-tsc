@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import useGetCurrentUserPlaylists from "../../hooks/useGetCurrentUserPlaylists";
 import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { styled } from "@mui/material/styles";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const LibraryContainer = styled(Box)({
   display: "flex",
@@ -31,6 +31,12 @@ const LibraryContainer = styled(Box)({
       background: "#00000030",
     },
   },
+});
+
+const LibraryTitle = styled(Typography)({
+  fontSize: "1.5rem",
+  fontWeight: "700",
+  padding: "0 1rem 1rem 1rem ",
 });
 
 const LibraryPage = () => {
@@ -63,6 +69,7 @@ const LibraryPage = () => {
 
   return (
     <LibraryContainer>
+      <LibraryTitle>{user.display_name}님의 라이브러리</LibraryTitle>
       {playlists && playlists.length > 0 ? (
         <>
           {playlists.map((playlist, index) => (

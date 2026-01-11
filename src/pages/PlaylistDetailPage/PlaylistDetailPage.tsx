@@ -15,12 +15,12 @@ import {
 } from "@mui/material";
 import { Music } from "lucide-react";
 import useGetPlaylistItems from "../../hooks/useGetPlaylistItems";
-import DesktopPlaylistItem from "./components/DesktopPlaylistItem";
 import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import LoginButton from "../../common/components/LoginButton";
 import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
+import PlaylistItem from "./components/PlaylistItem";
 
 const PlaylistContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -242,7 +242,11 @@ const PlaylistDetailPage = () => {
       ) : (
         <TrackListTableContainer>
           <TrackListTable stickyHeader>
-            <TrackListTableHead>
+            <TrackListTableHead
+              sx={{
+                display: { xs: "none", lg: "table-header-group" },
+              }}
+            >
               <TableRow>
                 <TrackListTableCell sx={{ borderRadius: "0.5rem 0 0 0" }}>
                   노래
@@ -257,7 +261,7 @@ const PlaylistDetailPage = () => {
             <TrackListTableBody>
               {tracks?.pages.map((page) =>
                 page.items.map((item, ItemIndex) => {
-                  return <DesktopPlaylistItem key={ItemIndex} item={item} />;
+                  return <PlaylistItem key={ItemIndex} item={item} />;
                 })
               )}
             </TrackListTableBody>

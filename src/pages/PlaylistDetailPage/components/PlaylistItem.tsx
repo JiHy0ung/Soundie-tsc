@@ -3,7 +3,7 @@ import type { PlaylistTrack } from "../../../models/playlist";
 import type { Episode, Track } from "../../../models/track";
 import { alpha, styled } from "@mui/material/styles";
 
-interface DesktopPlaylistItemProps {
+interface PlaylistItemProps {
   item: PlaylistTrack;
 }
 
@@ -43,7 +43,7 @@ const TrackImage = styled(Box)<BoxProps<"img">>({
   borderRadius: "0.2rem",
 });
 
-const DesktopPlaylistItem = ({ item }: DesktopPlaylistItemProps) => {
+const PlaylistItem = ({ item }: PlaylistItemProps) => {
   const isEpisode = (track: Track | Episode): track is Episode => {
     return "description" in track;
   };
@@ -81,10 +81,22 @@ const DesktopPlaylistItem = ({ item }: DesktopPlaylistItemProps) => {
       <TrackCell>
         {isEpisode(item.track) ? "N/A" : item.track.album?.name}
       </TrackCell>
-      <TrackCell>{formatDuration(item.track.duration_ms)}</TrackCell>
-      <TrackCell>{formatDate(item.added_at)}</TrackCell>
+      <TrackCell
+        sx={{
+          display: { xs: "none", md: "none", lg: "table-cell" },
+        }}
+      >
+        {formatDuration(item.track.duration_ms)}
+      </TrackCell>
+      <TrackCell
+        sx={{
+          display: { xs: "none", md: "none", lg: "table-cell" },
+        }}
+      >
+        {formatDate(item.added_at)}
+      </TrackCell>
     </TrackTableRow>
   );
 };
 
-export default DesktopPlaylistItem;
+export default PlaylistItem;
