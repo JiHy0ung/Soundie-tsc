@@ -186,7 +186,7 @@ const PlaylistDetailPage = () => {
   });
   const { data: user } = useGetCurrentUserProfile();
 
-  console.log("ttt", tracks);
+  console.log("ttt", playlist);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {

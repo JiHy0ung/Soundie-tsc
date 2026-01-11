@@ -21,6 +21,7 @@ const CardContainer = styled(Box)({
 });
 
 const AlbumBox = styled(Box)(({ theme }) => ({
+  position: "relative",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
